@@ -1,0 +1,35 @@
+* {
+    margin: 0.2rem;
+    align-items: start;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 35%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font: Georgia;
+    margin-top: 30px;
+}
+
+form > input {
+    width: 97%;
+    padding: 3px;
+}
+
+form > label {
+    margin-top: 1rem;
+    font-size: 15px;
+    font-weight: 525;
+}
+
+#submit {
+    width: 4rem;
+    color: white;
+    background-color: #1d57de;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 10%;
+    box-shadow: 2px 2px 5px black;
+}
