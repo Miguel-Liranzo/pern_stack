@@ -1,44 +1,81 @@
-import React from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import './css/Table.css'
 
 const TableHeader = () => {
     return (
-        <thead>
-            <tr class='table-headings'>
-                <th class='col1'>Name</th>
-                <th class='col2'>URL</th>
-                <th class='col3'>Remove</th>
-            </tr>
-        </thead>
+        <Fragment>
+            <thead>
+                <tr className='table'>
+                    <th className='col1'>Name</th>
+                    <th className='col2'>URL</th>
+                    <th className='col3'>Remove</th>
+                </tr>
+            </thead>
+        </Fragment>
+        
     )
 }
 
 const TableBody = (props) => {
-    const rows = props.linkData.map((link, index) => {
+    const [links, setLinks] = useState([])
+
+    // Deleting links
+    const deleteLink = async (id) => {
+        try {
+            const deleteLink = await fetch(`http://localhost:5000/links/${id}`, {
+                method: 'DELETE'
+            })
+        } catch (err) {
+            console.error(err.message)
+        }
+    }
+
+    // Getting links
+    const getLinks = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/links')
+            const resData = await response.json()
+            setLinks(resData)
+        } catch (err) {
+            console.error(err.message)
+        }
+    }
+    useEffect( () => {
+        getLinks()
+    }, [])
+    
+    // Creating rows based off those links
+    const rows = links.map( (link) => {
         return (
-            <tr key={index} class='table-headings'>
-                <td class='col1'>{link.name}</td>
-                <td class='col2'>
-                    <a href={link.url}>{link.url}</a>
-                </td>
-                <td class='col3'>
-                    <input class='submit' value='Remove' onClick={() => props.handleRemove(index)}></input>
-                </td>
-            </tr>
+            <Fragment>
+                <tr key={link.id} className='table-headings'>
+                    <td className='col1'>{link.name}</td>
+                    <td className='col2'>
+                        <a href={link.url}>{link.url}</a>
+                    </td>
+                    <td className='col3'>
+                        <button className='submit' onClick={ () => deleteLink(link.id)}>Remove</button>
+                    </td>
+                </tr>
+            </Fragment>
         )
     })
 
+    // Returned rows
     return (
         <tbody>{rows}</tbody>
     )
 }
  
-const Table = (props) => {
+const Table = () => {
     return (
-        <table class='table'>
-            <TableHeader />
-            <TableBody linkData={props.linkData} handleRemove={props.removeLink}/>
-        </table>
+        <Fragment>
+            <table className='table'>
+                <TableHeader />
+                <TableBody />
+            </table>
+        </Fragment>
+        
     )
 }
 

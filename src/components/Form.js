@@ -1,54 +1,58 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import './css/Form.css'
 
 const Form = (props) => {
     const[name, setName] = useState('')
     const[URL, setURL] = useState('')
 
-    const handleChange = (event) => {
-        if (event.target.id === 'name') setName(event.target.value)
-        else setURL(event.target.value)
-    }
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
+        try {
+            const jsonBody = {
+                name: name,
+                url: URL
+            }
+            const response = await fetch('http://localhost:5000/links', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify(jsonBody)
+            })
 
-        if (name !== '' && URL !== '') {
-            props.addLink(
-                {
-                    name: name, 
-                    url: URL
-                })
+            console.log(response)
             setName('')
             setURL('')
+    }   catch (err) {
+            console.error(err.message)
         }
     }
 
-    return ( 
-        <form class='form'>
-            <h2>Add New</h2>
-            <label>Name</label>
-            <input
-                id='name'
-                type='text'
-                onChange={handleChange}
-                value={name}
-            />
-            <label>URL</label>
-            <input
-                id='url'
-                type='text'
-                onChange={handleChange}
-                value={URL}
-            />
-            <input
-                id='submit'
-                type='submit'
-                value='Add'
-                onClick={handleSubmit}
-            />
-        </form>
+    return (
+        <Fragment>
+            <form className='form'>
+                <h2>Add New</h2>
+                <label>Name</label>
+                <input
+                    id='name'
+                    type='text'
+                    onChange={event => setName(event.target.value)}
+                    value={name}
+                />
+                <label>URL</label>
+                <input
+                    id='url'
+                    type='text'
+                    onChange={event => setURL(event.target.value)}
+                    value={URL}
+                />
+                <button
+                    id='submit'
+                    type='submit'
+                    onClick={handleSubmit}>
+                        Add
+                </button>
+            </form>  
+        </Fragment>
+        
     )
 }
 export default Form
