@@ -10,17 +10,16 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     try {
-        res.json({message1: test.test, message2: test.test2})
+        res.sendFile()
     } catch (error) {
         console.error(error.message)
     }
 })
-app.get('/links', (req, res) => {
+app.get('/links', async (req, res) => {
     try {
-        res.json(async () => {
-            await db.query('SELECT * FROM links')
-        } 
-    )} catch (error) {
+        const getAll = await db.query('SELECT * FROM links')
+        res.status(200).json(getAll.rows)
+    } catch (error) {
         console.error(error.message)
     }
 })
@@ -33,7 +32,7 @@ app.get('/links/:id', async (req, res) => {
         console.error(error.message)
     }
 })
-app.put('/link/:id', async (req, res) => {
+app.put('/links/:id', async (req, res) => {
     try {
         const { id } = req.params
         const linkInfo = req.body
@@ -42,7 +41,7 @@ app.put('/link/:id', async (req, res) => {
         console.error(error.message)
     }
 })
-app.post('/link', async (req, res) => {
+app.post('/links', async (req, res) => {
     try {
         const linkInfo  = req.body
         const newLink = await db.query('INSERT INTO links (name, url) VALUES ($1, $2) RETURNING *', [linkInfo.name, linkInfo.url])
@@ -50,7 +49,7 @@ app.post('/link', async (req, res) => {
         console.error(error.message)
     }
 })
-app.delete('/link/:id', async (req, res) => {
+app.delete('/links/:id', async (req, res) => {
     try {
         const {id} = req.params
         const deleteLink = await db.query('DELETE FROM links WHERE id = $1', [id])

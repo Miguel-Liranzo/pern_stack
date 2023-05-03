@@ -1,9 +1,6 @@
 .table {
     margin-top: 50px;
-    width: 35%
-}
-
-.table-headings {
+    width: 35%;
     display: flex;
 }
 
