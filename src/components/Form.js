@@ -1,34 +1,34 @@
 import React, { Fragment, useState } from 'react'
 import './css/Form.css'
 
-const Form = (props) => {
+const Form = () => {
     const[name, setName] = useState('')
     const[URL, setURL] = useState('')
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        try {
-            const jsonBody = {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
                 name: name,
                 url: URL
-            }
-            const response = await fetch('http://localhost:5000/links', {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify(jsonBody)
             })
-
+        }
+        try {
+            const response = await fetch('http://localhost:5000/links', requestOptions)
+                                    .then(response => response.json())
             console.log(response)
             setName('')
             setURL('')
-    }   catch (err) {
+        } catch (err) {
             console.error(err.message)
         }
     }
 
     return (
         <Fragment>
-            <form className='form'>
+            <form className='form' onSubmit={handleSubmit}>
                 <h2>Add New</h2>
                 <label>Name</label>
                 <input
@@ -46,13 +46,11 @@ const Form = (props) => {
                 />
                 <button
                     id='submit'
-                    type='submit'
-                    onClick={handleSubmit}>
+                    type='submit'>
                         Add
                 </button>
             </form>  
         </Fragment>
-        
     )
 }
 export default Form

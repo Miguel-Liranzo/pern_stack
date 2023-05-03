@@ -27,7 +27,7 @@ app.get('/links/:id', async (req, res) => {
     try {
         const { id } = req.params
         const deleteLink = await db.query('SELECT name, url FROM link links WHERE id = $1', [id])
-        res.json(deleteLink)
+        res.status(200).json(deleteLink)
     } catch (error) {
         console.error(error.message)
     }
@@ -37,6 +37,7 @@ app.put('/links/:id', async (req, res) => {
         const { id } = req.params
         const linkInfo = req.body
         const editLink = await db.query('UPDATE links SET name = $1, url = $2 WHERE id = $3', [linkInfo.name, linkInfo.url, id])
+        res.status(200).json(editLink)
     } catch (error) {
         console.error(error.message)
     }
@@ -45,6 +46,7 @@ app.post('/links', async (req, res) => {
     try {
         const linkInfo  = req.body
         const newLink = await db.query('INSERT INTO links (name, url) VALUES ($1, $2) RETURNING *', [linkInfo.name, linkInfo.url])
+        res.status(200).json(newLink)
     } catch (error) {
         console.error(error.message)
     }
@@ -52,8 +54,8 @@ app.post('/links', async (req, res) => {
 app.delete('/links/:id', async (req, res) => {
     try {
         const {id} = req.params
-        const deleteLink = await db.query('DELETE FROM links WHERE id = $1', [id])
-        res.json({message: "success"})
+        const deleteLink = await db.query('DELETE FROM links WHERE id = $1 RETURNING *', [id])
+        res.status(200).json(deleteLink)
     } catch (error) {
         console.error(error.message)
     }
