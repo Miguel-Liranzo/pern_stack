@@ -3,24 +3,25 @@ import './css/Form.css'
 
 const Form = () => {
     const[name, setName] = useState('')
-    const[URL, setURL] = useState('')
+    const[URL, setURL] = useState('https://')
 
     const handleSubmit = async (event) => {
         event.preventDefault()
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: name,
-                url: URL
-            })
-        }
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        url: URL
+                    })
+                }
         try {
             const response = await fetch('http://localhost:5000/links', requestOptions)
-                                    .then(response => response.json())
-            console.log(response)
+            const jsonData = await response.json()
+            console.log(jsonData)
             setName('')
-            setURL('')
+            setURL('https://')
+            window.location = '/'
         } catch (err) {
             console.error(err.message)
         }

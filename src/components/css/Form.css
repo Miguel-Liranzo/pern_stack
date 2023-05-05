@@ -25,11 +25,10 @@ form > label {
 }
 
 #submit {
-    width: 4rem;
+    width: 3.5rem;
     color: white;
-    background-color: #1d57de;
+    background-color: #00b41b;
     font-size: 14px;
     padding: 5px;
     border-radius: 10%;
-    box-shadow: 2px 2px 5px black;
 }

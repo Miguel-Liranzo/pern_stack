@@ -27,4 +27,26 @@
     box-shadow: 2px 2px 5px black;
     text-align: center;
 }
+
+.delete {
+    width: 3.5rem;
+    color: white;
+    background-color: rgb(244, 0, 0);
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 10%;
+}
+
+.edit {
+    width: 3.5rem;
+    color: white;
+    background-color: rgb(212, 170, 5);
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 10%;
+}
+
+* > a {
+    text-decoration: none;
+}
  

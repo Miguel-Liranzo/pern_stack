@@ -1,9 +1,25 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import './css/Table.css'
+import EditButton from './EditButton'
 
 
 const Table = () => {
     const [links, setLinks] = useState([])
+
+    const deleteLink = async (id) => {
+        try {
+            const deleteLink = await fetch(`http://localhost:5000/links/${id}`, {
+                method: 'DELETE'
+            })
+            const jsonData = await deleteLink.json()
+            console.log(jsonData)
+            setLinks(links.filter( (link) => link.id !== id))
+            getLinks()
+        } catch (err) {
+            console.error(err.message)
+        }
+    }
+
     const getLinks = async () => {
         try {
             const response = await fetch('http://localhost:5000/links')
@@ -24,24 +40,27 @@ const Table = () => {
                     <tr>
                         <th>Name</th>
                         <th>Link</th>
-                        <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {links.map(link => (
-                        <tr>
+                        <tr key={link.id}>
                             <td>{link.name}</td>
-                            <td>{link.url}</td>
-                            <td>Edit</td>
-                            <td>Delete</td>
+                            <td>
+                                <a href={link.url}>{link.name}</a>
+                            </td>
+                            <td>
+                                <button className="delete" onClick={ () => deleteLink(link.id) }>
+                                    Delete
+                                </button>
+                            </td>
                         </tr>
                     ))
                     }
                 </tbody>
             </table>
         </Fragment>
-        
     )
 }
 
